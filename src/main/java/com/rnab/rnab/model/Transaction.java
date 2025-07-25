@@ -18,7 +18,7 @@ public class Transaction {
     private AccountActivity accountActivity;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "category_id")
     private Category category;
 
     @Column(nullable = false)

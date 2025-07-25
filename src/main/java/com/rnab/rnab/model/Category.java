@@ -14,14 +14,14 @@ public class Category {
     @Column(nullable = false)
     private String categoryName;
 
+    @Column(nullable = false)
+    private boolean isSystemCategory = false;
+
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal plannedAmount;
 
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal defaultPlannedAmount;
-
-    @Column(nullable = false)
-    private String categoryGroup;
 
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal assignedAmount = BigDecimal.ZERO;
@@ -33,8 +33,8 @@ public class Category {
     private BigDecimal availableAmount = BigDecimal.ZERO;
 
     @ManyToOne
-    @JoinColumn(name = "plan_id", nullable = false)
-    private Plan plan;
+    @JoinColumn(name = "category_group_id", nullable = false)
+    private CategoryGroup categoryGroup;
 
     public Long getCategoryId() {
         return categoryId;
@@ -46,6 +46,14 @@ public class Category {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    public boolean isSystemCategory() {
+        return isSystemCategory;
+    }
+
+    public void setSystemCategory(boolean systemCategory) {
+        isSystemCategory = systemCategory;
     }
 
     public BigDecimal getPlannedAmount() {
@@ -76,24 +84,20 @@ public class Category {
         return availableAmount;
     }
 
-    public void setAvailableAmount(BigDecimal availableAmount) {
-        this.availableAmount = availableAmount;
-    }
-
-    public String getCategoryGroup() {
-        return categoryGroup;
-    }
-
-    public void setCategoryGroup(String categoryGroup) {
-        this.categoryGroup = categoryGroup;
-    }
-
     public BigDecimal getDefaultPlannedAmount() {
         return defaultPlannedAmount;
     }
 
     public void setDefaultPlannedAmount(BigDecimal defaultPlannedAmount) {
         this.defaultPlannedAmount = defaultPlannedAmount;
+    }
+
+    public CategoryGroup getCategoryGroup() {
+        return categoryGroup;
+    }
+
+    public void setGroup(CategoryGroup categoryGroup) {
+        this.categoryGroup = categoryGroup;
     }
 
     public void updateAvailableAmount() {
@@ -121,11 +125,4 @@ public class Category {
         updateAvailableAmount();
     }
 
-    public Plan getPlan() {
-        return plan;
-    }
-
-    public void setPlan(Plan plan) {
-        this.plan = plan;
-    }
 }

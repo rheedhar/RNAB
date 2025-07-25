@@ -1,6 +1,8 @@
 package com.rnab.rnab.model;
 
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +19,11 @@ public class Plan {
     private LocalDate planDate;
 
     @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<Category> spendingCategories = new ArrayList<>();
+    private List<CategoryGroup> categoryGroups = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     public Long getPlanId() {
         return planId;
@@ -31,17 +37,26 @@ public class Plan {
         return planDate;
     }
 
-    public List<Category> getSpendingCategories() {
-        return spendingCategories;
+    public List<CategoryGroup> getCategoryGroups() {
+        return categoryGroups;
     }
 
-    public void addCategory(Category category) {
-        spendingCategories.add(category);
-        category.setPlan(this);
+    public User getUser() {
+        return user;
     }
 
-    public void removeCategory(Category category) {
-        spendingCategories.remove(category);
-        category.setPlan(null);
+    public void setUser(User user) {
+        this.user = user;
     }
+
+    public void addCategoryGroup(CategoryGroup categoryGroup) {
+        categoryGroups.add(categoryGroup);
+        categoryGroup.setPlan(this);
+    }
+
+    public void removeCategoryGroup(CategoryGroup categoryGroup) {
+        categoryGroups.remove(categoryGroup);
+        categoryGroup.setPlan(null);
+    }
+
 }

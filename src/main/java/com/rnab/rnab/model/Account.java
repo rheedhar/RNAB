@@ -24,6 +24,10 @@ public class Account {
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<AccountActivity> accountMonthlyActivities = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    public User user;
+
     public Long getAccountId() {
         return accountId;
     }
@@ -48,9 +52,22 @@ public class Account {
         return accountMonthlyActivities;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public void addToAccountMonthlyActivities(AccountActivity accountActivity) {
         accountMonthlyActivities.add(accountActivity);
         accountActivity.setAccount(this);
+    }
+
+    public void removeAccountActivity(AccountActivity accountActivity) {
+        accountMonthlyActivities.remove(accountActivity);
+        accountActivity.setAccount(null);
     }
 
 }
