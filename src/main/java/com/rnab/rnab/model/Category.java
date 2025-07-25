@@ -1,14 +1,44 @@
 package com.rnab.rnab.model;
 
-public class Category {
-    private String categoryName;
-    private double plannedAmount;
-    private double assignedAmount;
-    private double activityAmount;
-    private double availableAmount;
-    private String categoryGroup;
-    private double defaultPlannedAmount;
+import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+
+@Entity
+@Table(name="categories")
+public class Category {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long categoryId;
+
+    @Column(nullable = false)
+    private String categoryName;
+
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal plannedAmount;
+
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal defaultPlannedAmount;
+
+    @Column(nullable = false)
+    private String categoryGroup;
+
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal assignedAmount = BigDecimal.ZERO;
+
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal activityAmount = BigDecimal.ZERO;
+
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal availableAmount = BigDecimal.ZERO;
+
+    @ManyToOne
+    @JoinColumn(name = "plan_id", nullable = false)
+    private Plan plan;
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
 
     public String getCategoryName() {
         return categoryName;
@@ -18,32 +48,36 @@ public class Category {
         this.categoryName = categoryName;
     }
 
-    public double getPlannedAmount() {
+    public BigDecimal getPlannedAmount() {
         return plannedAmount;
     }
 
-    public void setPlannedAmount(double plannedAmount) {
+    public void setPlannedAmount(BigDecimal plannedAmount) {
         this.plannedAmount = plannedAmount;
     }
 
-    public double getAssignedAmount() {
+    public BigDecimal getAssignedAmount() {
         return assignedAmount;
     }
 
-    public void setAssignedAmount(double assignedAmount) {
+    public void setAssignedAmount(BigDecimal assignedAmount) {
         this.assignedAmount = assignedAmount;
     }
 
-    public double getActivityAmount() {
+    public BigDecimal getActivityAmount() {
         return activityAmount;
     }
 
-    public void setActivityAmount(double activityAmount) {
+    public void setActivityAmount(BigDecimal activityAmount) {
         this.activityAmount = activityAmount;
     }
 
-    public double getAvailableAmount() {
+    public BigDecimal getAvailableAmount() {
         return availableAmount;
+    }
+
+    public void setAvailableAmount(BigDecimal availableAmount) {
+        this.availableAmount = availableAmount;
     }
 
     public String getCategoryGroup() {
@@ -54,36 +88,44 @@ public class Category {
         this.categoryGroup = categoryGroup;
     }
 
-    public double getDefaultPlannedAmount() {
+    public BigDecimal getDefaultPlannedAmount() {
         return defaultPlannedAmount;
     }
 
-    public void setDefaultPlannedAmount(double defaultPlannedAmount) {
+    public void setDefaultPlannedAmount(BigDecimal defaultPlannedAmount) {
         this.defaultPlannedAmount = defaultPlannedAmount;
     }
 
     public void updateAvailableAmount() {
-        this.availableAmount = this.assignedAmount - this.activityAmount;
+        this.availableAmount = this.assignedAmount.subtract(this.activityAmount);
     }
 
 
-    public void addToAssignedAmount(double amount) {
-        this.assignedAmount += amount;
+    public void addToAssignedAmount(BigDecimal amount) {
+        this.assignedAmount = this.assignedAmount.add(amount);
         updateAvailableAmount();
     }
 
-    public void subtractFromAssignedAmount(double amount) {
-        this.assignedAmount -= amount;
+    public void subtractFromAssignedAmount(BigDecimal amount) {
+        this.assignedAmount = this.assignedAmount.subtract(amount);
         updateAvailableAmount();
     }
 
-    public void addToActivityAmount(double amount) {
-        this.activityAmount += amount;
+    public void addToActivityAmount(BigDecimal amount) {
+        this.activityAmount = this.activityAmount.add(amount);
         updateAvailableAmount();
     }
 
-    public void subtractFromActivityAmount(double amount) {
-        this.activityAmount -= amount;
+    public void subtractFromActivityAmount(BigDecimal amount) {
+        this.activityAmount = this.activityAmount.subtract(amount);
         updateAvailableAmount();
+    }
+
+    public Plan getPlan() {
+        return plan;
+    }
+
+    public void setPlan(Plan plan) {
+        this.plan = plan;
     }
 }
