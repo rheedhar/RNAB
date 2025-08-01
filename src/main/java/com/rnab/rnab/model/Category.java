@@ -1,5 +1,6 @@
 package com.rnab.rnab.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -9,13 +10,11 @@ import java.math.BigDecimal;
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long categoryId;
+    @Column(name="category_id")
+    private Long id;
 
     @Column(nullable = false)
     private String categoryName;
-
-    @Column(nullable = false)
-    private boolean isSystemCategory = false;
 
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal plannedAmount;
@@ -34,10 +33,11 @@ public class Category {
 
     @ManyToOne
     @JoinColumn(name = "category_group_id", nullable = false)
+    @JsonIgnore
     private CategoryGroup categoryGroup;
 
-    public Long getCategoryId() {
-        return categoryId;
+    public Long getId() {
+        return id;
     }
 
     public String getCategoryName() {
@@ -46,14 +46,6 @@ public class Category {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
-    }
-
-    public boolean isSystemCategory() {
-        return isSystemCategory;
-    }
-
-    public void setSystemCategory(boolean systemCategory) {
-        isSystemCategory = systemCategory;
     }
 
     public BigDecimal getPlannedAmount() {

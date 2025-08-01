@@ -1,33 +1,34 @@
 package com.rnab.rnab.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
-@Table(name="category_groups")
+@Table(name="category_groups", uniqueConstraints = @UniqueConstraint(columnNames = {"plan_id", "group_name"}))
 public class CategoryGroup {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long categoryGroupId;
+    @Column(name="category_group_id")
+    private Long id;
 
     @Column(nullable = false)
     private String groupName;
-
-    @Column(nullable = false)
-    private boolean isSystemGroup = false;
 
     @OneToMany(mappedBy = "categoryGroup", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Category> categories = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "plan_id")
+    @JoinColumn(name = "plan_id", nullable = false)
+    @JsonIgnore
     private Plan plan;
 
-    public Long getCategoryGroupId() {
-        return categoryGroupId;
+    public Long getId() {
+        return id;
     }
 
     public String getGroupName() {
@@ -38,17 +39,8 @@ public class CategoryGroup {
         this.groupName = groupName;
     }
 
-    public boolean isSystemGroup() {
-        return isSystemGroup;
-    }
-
-    public void setSystemGroup(boolean systemGroup) {
-        isSystemGroup = systemGroup;
-    }
-
-
     public List<Category> getCategories() {
-        return categories;
+        return Collections.unmodifiableList(categories);
     }
 
     public Plan getPlan() {

@@ -1,11 +1,13 @@
 package com.rnab.rnab.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rnab.rnab.model.enums.TransactionType;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -13,7 +15,8 @@ import java.util.List;
 public class AccountActivity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long accountActivityId;
+    @Column(name="account_activity_id")
+    private Long id;
 
     @Column(nullable = false)
     private LocalDate accountActivityDate;
@@ -32,11 +35,12 @@ public class AccountActivity {
 
     @ManyToOne
     @JoinColumn(name = "account_id", nullable = false)
+    @JsonIgnore
     private Account account;
 
 
-    public Long getAccountActivityId() {
-        return accountActivityId;
+    public Long getId() {
+        return id;
     }
 
     public LocalDate getAccountActivityDate() {
@@ -84,7 +88,7 @@ public class AccountActivity {
     }
 
     public List<Transaction> getTransactions() {
-        return transactions;
+        return Collections.unmodifiableList(transactions);
     }
 
     public void addTransaction(Transaction transaction) {

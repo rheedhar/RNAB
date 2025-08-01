@@ -1,9 +1,11 @@
 package com.rnab.rnab.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rnab.rnab.model.enums.AccountType;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -12,7 +14,8 @@ public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long accountId;
+    @Column(name="account_id")
+    private Long id;
 
     @Column(nullable = false)
     private String accountName;
@@ -26,10 +29,11 @@ public class Account {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     public User user;
 
-    public Long getAccountId() {
-        return accountId;
+    public Long getId() {
+        return id;
     }
 
     public String getAccountName() {
@@ -49,7 +53,7 @@ public class Account {
     }
 
     public List<AccountActivity> getAccountMonthlyActivities() {
-        return accountMonthlyActivities;
+        return Collections.unmodifiableList(accountMonthlyActivities);
     }
 
     public User getUser() {

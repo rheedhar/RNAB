@@ -1,5 +1,6 @@
 package com.rnab.rnab.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rnab.rnab.model.enums.TransactionType;
 import jakarta.persistence.*;
 
@@ -11,15 +12,20 @@ import java.time.LocalDate;
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long transactionId;
+    @Column(name="transaction_id")
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "account_activity_id", nullable = false)
+    @JsonIgnore
     private AccountActivity accountActivity;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @Column(nullable = false)
+    private boolean isReadyToAssignTransaction = false;
 
     @Column(nullable = false)
     private LocalDate transactionDate;
@@ -36,8 +42,8 @@ public class Transaction {
     private BigDecimal transactionAmount;
 
 
-    public Long getTransactionId() {
-        return transactionId;
+    public Long getId() {
+        return id;
     }
 
     public AccountActivity getAccountActivity() {
@@ -54,6 +60,14 @@ public class Transaction {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public boolean isReadyToAssignTransaction() {
+        return isReadyToAssignTransaction;
+    }
+
+    public void setReadyToAssignTransaction(boolean readyToAssignTransaction) {
+        this.isReadyToAssignTransaction = readyToAssignTransaction;
     }
 
     public LocalDate getTransactionDate() {
