@@ -21,11 +21,6 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @GetMapping("/home")
-    public String welcome() {
-        return "Welcome";
-    }
-
     @PostMapping("/register")
     public ResponseEntity<RegisterUserResponse> registerUser(@Valid @RequestBody RegisterUserRequest request) {
         User newUser = authService.registerUser(request);

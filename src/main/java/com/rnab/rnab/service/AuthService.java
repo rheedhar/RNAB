@@ -52,22 +52,4 @@ public class AuthService {
         }
     }
 
-    public User validateToken(String token) {
-        String email = jwtService.extractEmail(token);
-
-        try {
-            User user = userService.findByEmail(email);
-
-            if (!jwtService.isTokenValid(token, email)) {
-                throw new InvalidCredentialException("Invalid token");
-            }
-            return user;
-
-        } catch (UserNotFoundException e) {
-            throw new InvalidCredentialException("User not found");
-        }
-
-    }
-
-
 }

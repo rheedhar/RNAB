@@ -1,6 +1,9 @@
 package com.rnab.rnab.controller;
 
 import com.rnab.rnab.dto.CreateCategoryGroupRequest;
+import com.rnab.rnab.dto.CreateCategoryRequest;
+import com.rnab.rnab.dto.UpdateCategoryGroupRequest;
+import com.rnab.rnab.dto.UpdateCategoryRequest;
 import com.rnab.rnab.model.Plan;
 import com.rnab.rnab.service.PlanService;
 import jakarta.validation.Valid;
@@ -106,6 +109,71 @@ public class PlanController {
             Authentication auth) {
         String email = auth.getName();
         Plan updatedPlan = planService.addCategoryGroupToPlan(planId, request, email);
+        return ResponseEntity.ok(updatedPlan);
+    }
+
+
+    @DeleteMapping("/{planId}/category-groups/{categoryGroupId}")
+    public ResponseEntity<Plan> deleteCategoryGroupFromPlan(
+            @PathVariable Long planId,
+            @PathVariable Long categoryGroupId,
+            @RequestParam boolean deleteFromFutureMonths,
+            Authentication auth) {
+        String email = auth.getName();
+        Plan updatedPlan = planService.deleteCategoryGroupFromPlan(planId, categoryGroupId, email, deleteFromFutureMonths);
+        return ResponseEntity.ok(updatedPlan);
+    }
+
+
+    @PatchMapping("/{planId}/category-groups/{categoryGroupId}")
+    public ResponseEntity<Plan> updateCategoryGroupName(
+            @PathVariable Long planId,
+            @PathVariable Long categoryGroupId,
+            @Valid @RequestBody UpdateCategoryGroupRequest request,
+            @RequestParam boolean updateInFutureMonths,
+            Authentication auth) {
+        String email = auth.getName();
+        Plan updatedPlan = planService.updateCategoryGroupName(planId, categoryGroupId, request, email, updateInFutureMonths);
+        return ResponseEntity.ok(updatedPlan);
+    }
+
+
+    @PostMapping("{planId}/category-groups/{categoryGroupId}/categories")
+    public ResponseEntity<Plan> addCategoryToGroup (
+            @PathVariable Long planId,
+            @PathVariable Long categoryGroupId,
+            @Valid @RequestBody CreateCategoryRequest request,
+            Authentication auth
+            ) {
+        String email = auth.getName();
+        Plan updatedPlan = planService.addCategoryToGroup(planId, categoryGroupId, request, email);
+        return ResponseEntity.ok(updatedPlan);
+    }
+
+
+    @DeleteMapping("/{planId}/category-groups/{categoryGroupId}/categories/{categoryId}")
+    public ResponseEntity<Plan> deleteCategoryFromPlan(
+            @PathVariable Long planId,
+            @PathVariable Long categoryGroupId,
+            @PathVariable Long categoryId,
+            @RequestParam boolean deleteFromFutureMonths,
+            Authentication auth) {
+        String email = auth.getName();
+        Plan updatedPlan = planService.deleteCategoryFromGroup(planId, categoryGroupId, categoryId, email, deleteFromFutureMonths);
+        return ResponseEntity.ok(updatedPlan);
+    }
+
+
+    @PatchMapping("/{planId}/category-groups/{categoryGroupId}/categories/{categoryId}")
+    public ResponseEntity<Plan> updateCategoryName(
+            @PathVariable Long planId,
+            @PathVariable Long categoryGroupId,
+            @PathVariable Long categoryId,
+            @Valid @RequestBody UpdateCategoryRequest request,
+            @RequestParam boolean updateInFutureMonths,
+            Authentication auth) {
+        String email = auth.getName();
+        Plan updatedPlan = planService.updateCategoryName(planId, categoryGroupId, categoryId, request, email, updateInFutureMonths);
         return ResponseEntity.ok(updatedPlan);
     }
 

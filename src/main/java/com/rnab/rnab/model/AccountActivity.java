@@ -22,13 +22,13 @@ public class AccountActivity {
     private LocalDate accountActivityDate;
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal currentBalance = BigDecimal.ZERO;
+    private BigDecimal currentBalance = new BigDecimal("0.00");
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal totalDeposits = BigDecimal.ZERO;
+    private BigDecimal totalDeposits = new BigDecimal("0.00");
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal totalWithdrawals = BigDecimal.ZERO;
+    private BigDecimal totalWithdrawals = new BigDecimal("0.00");
 
     @OneToMany(mappedBy = "accountActivity", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Transaction> transactions = new ArrayList<>();

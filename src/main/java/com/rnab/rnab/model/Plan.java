@@ -24,7 +24,7 @@ public class Plan {
     private LocalDate planDate;
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal readyToAssignAmount = BigDecimal.ZERO;
+    private BigDecimal readyToAssignAmount = new BigDecimal("0.00");
 
     @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<CategoryGroup> categoryGroups = new ArrayList<>();

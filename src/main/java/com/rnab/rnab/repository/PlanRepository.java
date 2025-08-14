@@ -12,5 +12,6 @@ public interface PlanRepository extends JpaRepository<Plan, Long> {
     Optional<Plan> findByUserAndPlanDate(User user, LocalDate planDate);
     Optional<Plan> findByIdAndUser(Long id, User user);
     List<Plan> findByUserAndPlanDateGreaterThanEqual(User user, LocalDate planDate);
+    List<Plan> findByUserAndPlanDateGreaterThan(User user, LocalDate planDate);
     Optional<Plan> findTopByUserOrderByPlanDateDesc(User user);
 }

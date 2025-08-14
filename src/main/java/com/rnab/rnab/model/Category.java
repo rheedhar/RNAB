@@ -17,19 +17,19 @@ public class Category {
     private String categoryName;
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal plannedAmount;
+    private BigDecimal plannedAmount = new BigDecimal("0.00");
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal defaultPlannedAmount;
+    private BigDecimal defaultPlannedAmount = new BigDecimal("0.00");
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal assignedAmount = BigDecimal.ZERO;
+    private BigDecimal assignedAmount = new BigDecimal("0.00");
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal activityAmount = BigDecimal.ZERO;
+    private BigDecimal activityAmount = new BigDecimal("0.00");
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal availableAmount = BigDecimal.ZERO;
+    private BigDecimal availableAmount = new BigDecimal("0.00");
 
     @ManyToOne
     @JoinColumn(name = "category_group_id", nullable = false)

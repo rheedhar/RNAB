@@ -71,6 +71,42 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
+
+    @ExceptionHandler(DuplicateCategoryNameException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateCategoryName(DuplicateCategoryNameException ex) {
+        ErrorResponse error = new ErrorResponse(
+                "DUPLICATE_CATEGORY_NAME",
+                ex.getMessage(),
+                HttpStatus.BAD_REQUEST.value(),
+                LocalDateTime.now()
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+
+    @ExceptionHandler(CategoryGroupNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleCategoryGroupNotFound(CategoryGroupNotFoundException ex) {
+        ErrorResponse error = new ErrorResponse(
+                "CATEGORY_GROUP_NOT_FOUND",
+                ex.getMessage(),
+                HttpStatus.NOT_FOUND.value(),
+                LocalDateTime.now()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleCategoryNotFound(CategoryNotFoundException ex) {
+        ErrorResponse error = new ErrorResponse(
+                "CATEGORY_NOT_FOUND",
+                ex.getMessage(),
+                HttpStatus.NOT_FOUND.value(),
+                LocalDateTime.now()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
     /**
      * Handles validation errors from @Valid annotations
      */

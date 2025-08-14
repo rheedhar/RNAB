@@ -63,22 +63,19 @@ public class CategoryGroup {
     }
 
     public BigDecimal getTotalPlanned() {
-        return categories.stream().map(Category::getPlannedAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+        return categories.stream().map(Category::getPlannedAmount).reduce(new BigDecimal("0.00"), BigDecimal::add);
     }
 
     public BigDecimal getTotalAssigned() {
-        return categories.stream().map(Category::getAssignedAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+        return categories.stream().map(Category::getAssignedAmount).reduce(new BigDecimal("0.00"), BigDecimal::add);
     }
 
     public BigDecimal getTotalActivity() {
-        return categories.stream().map(Category::getActivityAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+        return categories.stream().map(Category::getActivityAmount).reduce(new BigDecimal("0.00"), BigDecimal::add);
     }
 
     public BigDecimal getTotalAvailable() {
         return getTotalAssigned().subtract(getTotalActivity());
     }
-
-
-
 
 }
