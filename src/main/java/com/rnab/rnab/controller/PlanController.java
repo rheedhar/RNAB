@@ -1,9 +1,6 @@
 package com.rnab.rnab.controller;
 
-import com.rnab.rnab.dto.CreateCategoryGroupRequest;
-import com.rnab.rnab.dto.CreateCategoryRequest;
-import com.rnab.rnab.dto.UpdateCategoryGroupRequest;
-import com.rnab.rnab.dto.UpdateCategoryRequest;
+import com.rnab.rnab.dto.plan.*;
 import com.rnab.rnab.model.Plan;
 import com.rnab.rnab.service.PlanService;
 import jakarta.validation.Valid;
@@ -117,10 +114,10 @@ public class PlanController {
     public ResponseEntity<Plan> deleteCategoryGroupFromPlan(
             @PathVariable Long planId,
             @PathVariable Long categoryGroupId,
-            @RequestParam boolean deleteFromFutureMonths,
+            @RequestParam boolean deleteFromFuturePlans,
             Authentication auth) {
         String email = auth.getName();
-        Plan updatedPlan = planService.deleteCategoryGroupFromPlan(planId, categoryGroupId, email, deleteFromFutureMonths);
+        Plan updatedPlan = planService.deleteCategoryGroupFromPlan(planId, categoryGroupId, email, deleteFromFuturePlans);
         return ResponseEntity.ok(updatedPlan);
     }
 
@@ -130,10 +127,10 @@ public class PlanController {
             @PathVariable Long planId,
             @PathVariable Long categoryGroupId,
             @Valid @RequestBody UpdateCategoryGroupRequest request,
-            @RequestParam boolean updateInFutureMonths,
+            @RequestParam boolean updateInFuturePlans,
             Authentication auth) {
         String email = auth.getName();
-        Plan updatedPlan = planService.updateCategoryGroupName(planId, categoryGroupId, request, email, updateInFutureMonths);
+        Plan updatedPlan = planService.updateCategoryGroupName(planId, categoryGroupId, request, email, updateInFuturePlans);
         return ResponseEntity.ok(updatedPlan);
     }
 
@@ -156,10 +153,10 @@ public class PlanController {
             @PathVariable Long planId,
             @PathVariable Long categoryGroupId,
             @PathVariable Long categoryId,
-            @RequestParam boolean deleteFromFutureMonths,
+            @RequestParam boolean deleteFromFuturePlans,
             Authentication auth) {
         String email = auth.getName();
-        Plan updatedPlan = planService.deleteCategoryFromGroup(planId, categoryGroupId, categoryId, email, deleteFromFutureMonths);
+        Plan updatedPlan = planService.deleteCategoryFromGroup(planId, categoryGroupId, categoryId, email, deleteFromFuturePlans);
         return ResponseEntity.ok(updatedPlan);
     }
 
@@ -170,10 +167,48 @@ public class PlanController {
             @PathVariable Long categoryGroupId,
             @PathVariable Long categoryId,
             @Valid @RequestBody UpdateCategoryRequest request,
-            @RequestParam boolean updateInFutureMonths,
+            @RequestParam boolean updateInFuturePlans,
             Authentication auth) {
         String email = auth.getName();
-        Plan updatedPlan = planService.updateCategoryName(planId, categoryGroupId, categoryId, request, email, updateInFutureMonths);
+        Plan updatedPlan = planService.updateCategoryName(planId, categoryGroupId, categoryId, request, email, updateInFuturePlans);
+        return ResponseEntity.ok(updatedPlan);
+    }
+
+    @PutMapping("/{planId}/category-groups/{categoryGroupId}/categories/{categoryId}/assign")
+    public ResponseEntity<Plan> assignMoneyToCategory(
+            @PathVariable Long planId,
+            @PathVariable Long categoryGroupId,
+            @PathVariable Long categoryId,
+            @Valid @RequestBody AssignMoneyToCategoryRequest request,
+            Authentication auth
+            ) {
+        String email = auth.getName();
+        Plan updatedPlan = planService.assignMoneyToCategory(planId, categoryGroupId, categoryId, request, email);
+        return ResponseEntity.ok(updatedPlan);
+    }
+
+
+    @PutMapping("/{planId}/ready-to-assign")
+    public ResponseEntity<Plan> assignToReadyToAssign(
+            @PathVariable Long planId,
+            @Valid @RequestBody AssignToReadyToAssignRequest request,
+            Authentication auth) {
+        String email = auth.getName();
+        Plan updatedPlan = planService.assignToReadyToAssign(planId, request, email);
+        return ResponseEntity.ok(updatedPlan);
+    }
+
+
+    @PutMapping("/{planId}/category-groups/{categoryGroupId}/categories/{categoryId}/target")
+    public ResponseEntity<Plan> setCategoryTarget(
+            @PathVariable Long planId,
+            @PathVariable Long categoryGroupId,
+            @PathVariable Long categoryId,
+            @Valid @RequestBody SetCategoryTargetAmountRequest request,
+            @RequestParam boolean updateInFuturePlans,
+            Authentication auth) {
+        String email = auth.getName();
+        Plan updatedPlan = planService.setCategoryTargetAmount(planId, categoryGroupId, categoryId, request, email, updateInFuturePlans);
         return ResponseEntity.ok(updatedPlan);
     }
 

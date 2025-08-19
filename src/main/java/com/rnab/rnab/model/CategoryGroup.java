@@ -54,12 +54,12 @@ public class CategoryGroup {
 
     public void addCategory(Category category) {
         categories.add(category);
-        category.setGroup(this);
+        category.setCategoryGroup(this);
     }
 
     public void removeCategory(Category category) {
         categories.remove(category);
-        category.setGroup(null);
+        category.setCategoryGroup(null);
     }
 
     public BigDecimal getTotalPlanned() {

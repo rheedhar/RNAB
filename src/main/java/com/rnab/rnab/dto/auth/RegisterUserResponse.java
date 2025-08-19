@@ -1,4 +1,4 @@
-package com.rnab.rnab.dto;
+package com.rnab.rnab.dto.auth;
 
 import com.rnab.rnab.model.User;
 

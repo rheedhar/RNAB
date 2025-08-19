@@ -1,5 +1,9 @@
 package com.rnab.rnab.exception;
 
+import com.rnab.rnab.exception.auth.InvalidCredentialException;
+import com.rnab.rnab.exception.auth.UserAlreadyExistsException;
+import com.rnab.rnab.exception.auth.UserNotFoundException;
+import com.rnab.rnab.exception.plan.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -105,6 +109,17 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now()
         );
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(InsufficientFundsException.class)
+    public ResponseEntity<ErrorResponse> handleInsufficientFunds(InsufficientFundsException ex) {
+        ErrorResponse error = new ErrorResponse(
+                "INSUFFICIENT_FUNDS",
+                ex.getMessage(),
+                HttpStatus.BAD_REQUEST.value(),
+                LocalDateTime.now()
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
     /**

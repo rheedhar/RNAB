@@ -1,4 +1,4 @@
-package com.rnab.rnab.dto;
+package com.rnab.rnab.dto.plan;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

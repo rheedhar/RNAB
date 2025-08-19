@@ -1,8 +1,6 @@
 package com.rnab.rnab.service;
 
-import com.rnab.rnab.dto.RegisterUserRequest;
-import com.rnab.rnab.exception.UserAlreadyExistsException;
-import com.rnab.rnab.exception.UserNotFoundException;
+import com.rnab.rnab.exception.auth.UserNotFoundException;
 import com.rnab.rnab.model.User;
 import com.rnab.rnab.repository.UserRepository;
 import jakarta.transaction.Transactional;

@@ -1,4 +1,4 @@
-package com.rnab.rnab.exception;
+package com.rnab.rnab.exception.plan;
 
 public class DuplicateCategoryGroupNameException extends RuntimeException {
     public DuplicateCategoryGroupNameException(String message) {

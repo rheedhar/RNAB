@@ -1,4 +1,4 @@
-package com.rnab.rnab.exception;
+package com.rnab.rnab.exception.plan;
 
 public class CategoryGroupNotFoundException extends RuntimeException {
     public CategoryGroupNotFoundException(String message) {

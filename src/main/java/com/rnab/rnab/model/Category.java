@@ -1,5 +1,6 @@
 package com.rnab.rnab.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -16,18 +17,23 @@ public class Category {
     @Column(nullable = false)
     private String categoryName;
 
+    @JsonFormat(pattern="0.00")
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal plannedAmount = new BigDecimal("0.00");
 
+    @JsonFormat(pattern="0.00")
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal defaultPlannedAmount = new BigDecimal("0.00");
 
+    @JsonFormat(pattern="0.00")
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal assignedAmount = new BigDecimal("0.00");
 
+    @JsonFormat(pattern="0.00")
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal activityAmount = new BigDecimal("0.00");
 
+    @JsonFormat(pattern="0.00")
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal availableAmount = new BigDecimal("0.00");
 
@@ -62,6 +68,7 @@ public class Category {
 
     public void setAssignedAmount(BigDecimal assignedAmount) {
         this.assignedAmount = assignedAmount;
+        updateAvailableAmount();
     }
 
     public BigDecimal getActivityAmount() {
@@ -70,6 +77,7 @@ public class Category {
 
     public void setActivityAmount(BigDecimal activityAmount) {
         this.activityAmount = activityAmount;
+        updateAvailableAmount();
     }
 
     public BigDecimal getAvailableAmount() {
@@ -88,9 +96,10 @@ public class Category {
         return categoryGroup;
     }
 
-    public void setGroup(CategoryGroup categoryGroup) {
+    public void setCategoryGroup(CategoryGroup categoryGroup) {
         this.categoryGroup = categoryGroup;
     }
+
 
     public void updateAvailableAmount() {
         this.availableAmount = this.assignedAmount.subtract(this.activityAmount);

@@ -1,9 +1,9 @@
 package com.rnab.rnab.controller;
 
-import com.rnab.rnab.dto.LoginRequest;
-import com.rnab.rnab.dto.LoginResponse;
-import com.rnab.rnab.dto.RegisterUserRequest;
-import com.rnab.rnab.dto.RegisterUserResponse;
+import com.rnab.rnab.dto.auth.LoginRequest;
+import com.rnab.rnab.dto.auth.LoginResponse;
+import com.rnab.rnab.dto.auth.RegisterUserRequest;
+import com.rnab.rnab.dto.auth.RegisterUserResponse;
 import com.rnab.rnab.model.User;
 import com.rnab.rnab.service.AuthService;
 import jakarta.validation.Valid;

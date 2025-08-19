@@ -1,4 +1,4 @@
-package com.rnab.rnab.exception;
+package com.rnab.rnab.exception.auth;
 
 public class UserNotFoundException extends RuntimeException{
     public UserNotFoundException(String message){

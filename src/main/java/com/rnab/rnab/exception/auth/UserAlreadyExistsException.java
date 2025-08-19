@@ -1,4 +1,4 @@
-package com.rnab.rnab.exception;
+package com.rnab.rnab.exception.auth;
 
 public class UserAlreadyExistsException extends RuntimeException {
     public UserAlreadyExistsException(String message) {

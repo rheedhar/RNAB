@@ -1,10 +1,10 @@
 package com.rnab.rnab.service;
 
-import com.rnab.rnab.dto.LoginRequest;
-import com.rnab.rnab.dto.RegisterUserRequest;
-import com.rnab.rnab.exception.InvalidCredentialException;
-import com.rnab.rnab.exception.UserAlreadyExistsException;
-import com.rnab.rnab.exception.UserNotFoundException;
+import com.rnab.rnab.dto.auth.LoginRequest;
+import com.rnab.rnab.dto.auth.RegisterUserRequest;
+import com.rnab.rnab.exception.auth.InvalidCredentialException;
+import com.rnab.rnab.exception.auth.UserAlreadyExistsException;
+import com.rnab.rnab.exception.auth.UserNotFoundException;
 import com.rnab.rnab.model.User;
 import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;

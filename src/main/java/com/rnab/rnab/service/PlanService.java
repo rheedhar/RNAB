@@ -1,10 +1,8 @@
 package com.rnab.rnab.service;
 
-import com.rnab.rnab.dto.CreateCategoryGroupRequest;
-import com.rnab.rnab.dto.CreateCategoryRequest;
-import com.rnab.rnab.dto.UpdateCategoryGroupRequest;
-import com.rnab.rnab.dto.UpdateCategoryRequest;
+import com.rnab.rnab.dto.plan.*;
 import com.rnab.rnab.exception.*;
+import com.rnab.rnab.exception.plan.*;
 import com.rnab.rnab.model.Category;
 import com.rnab.rnab.model.CategoryGroup;
 import com.rnab.rnab.model.Plan;
@@ -37,9 +35,7 @@ public class PlanService {
         this.userService = userService;
     }
 
-
-    // Public Methods
-
+    // PUBLIC METHODS
     public List<Plan> initializePlansForUser(String userEmail) {
         User user = userService.findByEmail(userEmail);
 
@@ -303,6 +299,77 @@ public class PlanService {
 
     }
 
+    public Plan assignMoneyToCategory(Long planId, Long categoryGroupId, Long categoryId,
+                                      AssignMoneyToCategoryRequest request, String email) {
+
+        PlanAndCategoryGroup result = findPlanAndCategoryGroup(planId, categoryGroupId, email);
+        Category categoryToUpdate = findCategoryWithinCategoryGroupById(result, categoryId);
+
+        BigDecimal amountToAssign = request.getAmountToAssign();
+
+        // return existing assigned amount back to ready to assign and set category to 0
+        if (categoryToUpdate.getAssignedAmount().compareTo(new BigDecimal("0.00")) > 0) {
+            result.targetPlan.addToReadyToAssign(categoryToUpdate.getAssignedAmount());
+            categoryToUpdate.setAssignedAmount(new BigDecimal("0.00"));
+        }
+
+        // validate sufficient funds in ready to assign
+        if (amountToAssign.compareTo(result.targetPlan.getReadyToAssignAmount()) > 0) {
+            throw new InsufficientFundsException("Amount to assign is greater than amount in ready to assign");
+        }
+
+       // assign new amount
+        result.targetPlan.subtractFromReadyToAssign(amountToAssign);
+        categoryToUpdate.setAssignedAmount(amountToAssign);
+
+        categoryToUpdate.setAssignedAmount(new BigDecimal(amountToAssign.toString()).setScale(2));
+
+
+        // save all plans and return target plan
+        planRepository.save(result.targetPlan);
+        loadPlanData(result.targetPlan);
+        return result.targetPlan;
+    }
+
+    public Plan assignToReadyToAssign(Long planId, AssignToReadyToAssignRequest request, String email) {
+
+        PlanAndUser result = findPlanAndUser(planId, email);
+        BigDecimal amountToAssign = request.getAmountToAssign();
+
+        // assign new amount
+        result.targetPlan.setReadyToAssignAmount(amountToAssign);
+
+        // save all plans and return target plan
+        planRepository.save(result.targetPlan);
+        loadPlanData(result.targetPlan);
+        return result.targetPlan;
+    }
+
+
+    public Plan setCategoryTargetAmount(Long planId, Long categoryGroupId, Long categoryId,
+                                        SetCategoryTargetAmountRequest request, String email, boolean updateFuture) {
+
+        // find plan, category group, and category
+        PlanAndCategoryGroup result = findPlanAndCategoryGroup(planId, categoryGroupId, email);
+        Category categoryToUpdate = findCategoryWithinCategoryGroupById(result, categoryId);
+
+        BigDecimal amountToSet = request.getTargetAmount();
+
+        // set planned amount and default planned amount
+        categoryToUpdate.setPlannedAmount(amountToSet);
+        categoryToUpdate.setDefaultPlannedAmount(amountToSet);
+
+        // update future planned amount
+        if (updateFuture) {
+            updateFutureMonthsWithNewTargetAmount(result, categoryToUpdate.getCategoryName(), amountToSet);
+        }
+
+        // save all plans and return target plan
+        planRepository.save(result.targetPlan);
+        loadPlanData(result.targetPlan);
+        return result.targetPlan;
+    }
+
 
     /**
      * Runs every month on the 1st at midnight UTC
@@ -332,7 +399,7 @@ public class PlanService {
     }
 
 
-    // Private records / methods
+    //  PRIVATE RECORDS / METHODS
 
     private record PlanAndCategoryGroup(Plan targetPlan, CategoryGroup categoryGroup, User user) {}
 
@@ -396,9 +463,9 @@ public class PlanService {
                 for (Category existingCategory: existingCategoryGroup.getCategories()) {
                     Category newCategory = new Category();
                     newCategory.setCategoryName(existingCategory.getCategoryName());
-                    newCategory.setPlannedAmount(existingCategory.getDefaultPlannedAmount());
+                    newCategory.setAssignedAmount(existingCategory.getDefaultPlannedAmount());
                     newCategory.setDefaultPlannedAmount(existingCategory.getDefaultPlannedAmount());
-                    newCategory.setGroup(newCategoryGroup);
+                    newCategory.setCategoryGroup(newCategoryGroup);
                     newCategoryGroup.addCategory(newCategory);
                 }
             }
@@ -520,5 +587,31 @@ public class PlanService {
         }
     }
 
+    private void updateFutureMonthsWithNewTargetAmount(PlanAndCategoryGroup result, String categoryName, BigDecimal newTargetAmount) {
+        List<Plan> futurePlans = planRepository.findByUserAndPlanDateGreaterThan(result.user, result.targetPlan.getPlanDate());
+
+        for (Plan futurePlan : futurePlans) {
+            // find category group
+            Optional<CategoryGroup> futureGroup = futurePlan.getCategoryGroups().stream()
+                    .filter(group -> group.getGroupName().equalsIgnoreCase(result.categoryGroup.getGroupName()))
+                    .findFirst();
+
+            if (futureGroup.isPresent()) {
+                // find category
+                Optional<Category> futureCategory = futureGroup.get().getCategories().stream()
+                        .filter(category -> category.getCategoryName().equalsIgnoreCase(categoryName))
+                        .findFirst();
+
+                if (futureCategory.isPresent()) {
+                    Category category = futureCategory.get();
+                    category.setPlannedAmount(newTargetAmount);
+                    category.setDefaultPlannedAmount(newTargetAmount);
+                }
+            }
+        }
+
+        // save all future plans
+        planRepository.saveAll(futurePlans);
+    }
 
 }
