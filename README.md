@@ -1,10 +1,22 @@
-# RNAB (*REE Needs A Budget*)
+# RNAB (REE Needs A Budget)
 
 
 ## Introduction
-***RNAB***  is a personal budget app that helps you to create a personal budget, manage, and track your finances. 
-I created this app to address some of the challenges and frustrations I had with using the popular *YNAB(You Need A Budget)* budgeting app. 
+***RNAB***  is a personal budget app that helps you to create, manage, and track your finances. 
+I created this app to address some of the challenges and frustrations I had with the popular *YNAB(You Need A Budget)* app. 
 This was also a fun way for me to practice my java and web development skills.
+
+
+## Installation
+1. Clone the repository
+   ```
+   git clone https://github.com/rheedhar/RNAB
+   ```
+2. Download docker: [Docker](https://www.docker.com/)
+3. Open your terminal, navigate to the project folder. Run the following command: 
+   ```
+   docker-compose up --build
+   ```
 
 ## Features
 ***RNAB***  follows the ***YNAB*** philosophy of giving every dollar a job. The following features are supported
@@ -26,7 +38,7 @@ spending category or change the target amount for a specific month's plan withou
 - Framework: Spring Boot
 - API: REST API
 - Database: JPA/Hibernate with mySQL
-- Security: Spring Security, JWT
+- Security: Spring Security with JWT
 
 
 
