@@ -19,7 +19,7 @@ This was also a fun way for me to practice my java and web development skills.
    ```
 
 ## Current Features
-***RNAB***  follows the ***YNAB*** philosophy of giving every dollar a job. The following features are supported
+***RNAB***  follows the ***YNAB*** philosophy of giving every dollar a job. The following features are currently supported
 
 - Creating a budget plan
 - Auto-generation of budget plans for future months
