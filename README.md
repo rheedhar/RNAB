@@ -3,7 +3,7 @@
 
 ## Introduction
 ***RNAB***  is a personal budget app that helps you to create, manage, and track your finances. 
-I created this app to address some of the challenges and frustrations I had with the popular *YNAB(You Need A Budget)* app. 
+I created this app to address some of the limitations I had with the popular *YNAB(You Need A Budget)* app. 
 This was also a fun way for me to practice my java and web development skills.
 
 
@@ -15,10 +15,10 @@ This was also a fun way for me to practice my java and web development skills.
 2. Download docker: [Docker](https://www.docker.com/)
 3. Open your terminal, navigate to the project folder. Run the following command: 
    ```
-   docker-compose up --build
+   docker-compose up 
    ```
 
-## Features
+## Current Features
 ***RNAB***  follows the ***YNAB*** philosophy of giving every dollar a job. The following features are supported
 
 - Creating a budget plan
@@ -29,8 +29,6 @@ This was also a fun way for me to practice my java and web development skills.
 - Deciding if you want a modification in a current plan to affect future plan. For example, you can decide to delete a 
 spending category or change the target amount for a specific month's plan without it affecting future months
 - Creating multiple spending accounts (e.g., checking, savings, credit)
-- Logging transactions
-- Assigning a transaction to a category
 - User authentication
 
 ## Technologies
