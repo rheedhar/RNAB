@@ -1,0 +1,37 @@
+version: '3.8'
+services:
+  mysql:
+    image: mysql:latest
+    container_name: rnab-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: rnab
+      MYSQL_USER: rnab_user
+      MYSQL_PASSWORD: rnab_password
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    container_name: rnab-app
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/rnab
+      SPRING_DATASOURCE_USERNAME: rnab_user
+      SPRING_DATASOURCE_PASSWORD: rnab_password
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      JWT_SECRET: aVeryLongSecretKeyForRNABJWTTokenGeneration10964899
+      JWT_EXPIRATION: 86400000
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+volumes:
+  mysql_data:
