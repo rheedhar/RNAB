@@ -20,12 +20,11 @@ public class Transaction {
     @JsonIgnore
     private AccountActivity accountActivity;
 
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @Column(nullable = false)
-    private boolean isReadyToAssignTransaction = false;
 
     @Column(nullable = false)
     private LocalDate transactionDate;
@@ -60,14 +59,6 @@ public class Transaction {
 
     public void setCategory(Category category) {
         this.category = category;
-    }
-
-    public boolean isReadyToAssignTransaction() {
-        return isReadyToAssignTransaction;
-    }
-
-    public void setReadyToAssignTransaction(boolean readyToAssignTransaction) {
-        this.isReadyToAssignTransaction = readyToAssignTransaction;
     }
 
     public LocalDate getTransactionDate() {

@@ -28,9 +28,9 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponse> loginUser(@Valid @RequestBody LoginRequest request) {
-        String jwtToken = authService.loginUser(request);
+    @PostMapping("/authenticate")
+    public ResponseEntity<LoginResponse> authenticateUser(@Valid @RequestBody LoginRequest request) {
+        String jwtToken = authService.authenticateUser(request);
         LoginResponse response = new LoginResponse(jwtToken);
         return ResponseEntity.ok(response);
     }

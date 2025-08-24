@@ -1,7 +1,6 @@
 package com.rnab.rnab.service;
 
 import com.rnab.rnab.dto.plan.*;
-import com.rnab.rnab.exception.*;
 import com.rnab.rnab.exception.plan.*;
 import com.rnab.rnab.model.Category;
 import com.rnab.rnab.model.CategoryGroup;
@@ -35,9 +34,9 @@ public class PlanService {
         this.userService = userService;
     }
 
-    // PUBLIC METHODS
-    public List<Plan> initializePlansForUser(String userEmail) {
-        User user = userService.findByEmail(userEmail);
+
+    public List<Plan> initializePlansForUser(String email) {
+        User user = userService.findByEmail(email);
 
         YearMonth currentYearMonth = YearMonth.now(ZoneOffset.UTC);
         YearMonth nextYearMonth = currentYearMonth.plusMonths(1);
@@ -398,8 +397,6 @@ public class PlanService {
 
     }
 
-
-    //  PRIVATE RECORDS / METHODS
 
     private record PlanAndCategoryGroup(Plan targetPlan, CategoryGroup categoryGroup, User user) {}
 

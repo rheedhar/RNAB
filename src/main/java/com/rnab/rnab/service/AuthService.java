@@ -37,7 +37,7 @@ public class AuthService {
         return userService.saveUser(newUser);
     }
 
-    public String loginUser(LoginRequest loginRequest) {
+    public String authenticateUser(LoginRequest loginRequest) {
         try {
             User user = userService.findByEmail(loginRequest.getEmail());
 

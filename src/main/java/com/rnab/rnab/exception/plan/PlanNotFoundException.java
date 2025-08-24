@@ -1,4 +1,4 @@
-package com.rnab.rnab.exception;
+package com.rnab.rnab.exception.plan;
 
 public class PlanNotFoundException extends RuntimeException{
     public PlanNotFoundException(String message){

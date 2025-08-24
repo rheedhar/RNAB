@@ -1,5 +1,7 @@
 package com.rnab.rnab.exception;
 
+import com.rnab.rnab.exception.account.AccountNotFoundException;
+import com.rnab.rnab.exception.account.InvalidTransactionDateException;
 import com.rnab.rnab.exception.auth.InvalidCredentialException;
 import com.rnab.rnab.exception.auth.UserAlreadyExistsException;
 import com.rnab.rnab.exception.auth.UserNotFoundException;
@@ -120,6 +122,17 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now()
         );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(AccountNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleAccountNotFound(AccountNotFoundException ex) {
+        ErrorResponse error = new ErrorResponse(
+                "ACCOUNT_NOT_FOUND",
+                ex.getMessage(),
+                HttpStatus.NOT_FOUND.value(),
+                LocalDateTime.now()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
     /**
